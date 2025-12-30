@@ -33,8 +33,14 @@ end
 ############################################################################
 
 # isdependent returns true if eq is dependent on x
-function isdependent(eq, x)
-    return any(isequal(x, v) for v in get_variables(eq))
+function isdependent(eq, x)::Bool
+    vars = get_variables(eq)
+    for v in vars
+        if isequal(x, v)
+            return true
+        end
+    end
+    return false
 end
 
 # is_number(x) returns true if x is a concrete numerical type

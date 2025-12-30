@@ -190,7 +190,7 @@ function integrate_sum(eq, x; bypass = false, kwargs...)
                 unsolved += get_unsolved(p, sol)
                 ε₀ = max(ε₀, get_err(p, sol))
 
-                if !isequal(u, 0)   # premature termination on the first failure
+                if !isequal(unsolved, 0)   # premature termination on the first failure
                     return 0, eq, ε₀
                 end
             end

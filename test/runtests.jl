@@ -8,6 +8,7 @@ using SymbolicUtils.Rewriters
 using Test
 
 include("axiom.jl")
+include("jet_tests.jl")
 
 ##############################################################################
 
