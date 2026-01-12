@@ -79,7 +79,7 @@ function integrate(eq, x = nothing;
 
     eq = expand(eq)
 
-    if x == nothing
+    if x === nothing
         vars = get_variables(eq)
         if length(vars) > 1
             error("Multiple symbolic variables detect. Please pass the independent variable to `integrate`")
@@ -127,13 +127,13 @@ function integrate(eq, xx::Tuple; kwargs...)
     sol = integrate(eq, x; kwargs...)
 
     if sol isa Tuple
-        if !isequal(first(sol), 0) && sol[2] == 0
+        if !isequal(first(sol), 0) && isequal(sol[2], 0)
             return substitute(first(sol), Dict(x => hi)) -
                    substitute(first(sol), Dict(x => lo))
         else
             return nothing
         end
-    elseif sol != nothing
+    elseif sol !== nothing
         return substitute(sol, Dict(x => hi)) - substitute(sol, Dict(x => lo))
     end
 
@@ -143,18 +143,18 @@ end
 function get_solved(p, sol)
     if sol isa Tuple
         s = sol[1]
-        return s == nothing ? 0 : s
+        return s === nothing ? 0 : s
     else
-        return sol == nothing ? 0 : sol
+        return sol === nothing ? 0 : sol
     end
 end
 
 function get_unsolved(p, sol)
     if sol isa Tuple
         u = sol[2]
-        return u == nothing ? 0 : u
+        return u === nothing ? 0 : u
     else
-        return sol == 0 || sol == nothing ? p : 0
+        return isequal(sol, 0) || sol === nothing ? p : 0
     end
 end
 
@@ -162,7 +162,7 @@ function get_err(p, sol)
     if sol isa Tuple
         return sol[3]
     else
-        return sol == 0 || sol == nothing ? Inf : 0
+        return isequal(sol, 0) || sol === nothing ? Inf : 0
     end
 end
 
@@ -315,7 +315,7 @@ end
 function try_symbolic(eq, x, has_sym_consts = false, params = []; plan = default_plan())
     y = integrate_symbolic(eq, x; plan)
 
-    if y == nothing
+    if y === nothing
         if has_sym_consts && !isempty(params)
             @info("Symbolic integration failed. Try changing constant parameters ([$(join(params, ", "))]) to numerical values.")
         end
